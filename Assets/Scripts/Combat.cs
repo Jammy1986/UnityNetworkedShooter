@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class Combat : NetworkBehaviour
 {
     public const int MaxHealth = 100;
-    [SyncVar] private int _health = MaxHealth;
+    [SyncVar(hook = "UpdateHealth")] private int _health = MaxHealth;
 
     private void Start()
     {
-        UpdateHealth();
+        UpdateHealth(_health);
     }
 
     public void TakeDamage(int amount)
@@ -24,12 +24,15 @@ public class Combat : NetworkBehaviour
         {
             NetworkManager.singleton.ServerChangeScene("Lobby");
         }
-        UpdateHealth();
     }
-
-    private void UpdateHealth()
+    
+    private void UpdateHealth(int health)
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         var healthText = GameObject.Find("HealthHud").GetComponent<Text>();
-        healthText.text = "Health: " + _health;
+        healthText.text = "Health: " + health;
     }
 }
