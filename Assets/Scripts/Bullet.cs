@@ -6,7 +6,12 @@ public class Bullet : NetworkBehaviour
     private void OnCollisionEnter(Collision other)
     {
         //Have to go to the parent, since this object is either the box or the ball.
-        var hitPlayer = other.transform.parent.gameObject.GetComponent<PlayerController>();
+        var parentTransform = other.transform.parent;
+        if (parentTransform == null)
+        {
+            return; //This is not a player.
+        }
+        var hitPlayer = parentTransform.gameObject.GetComponent<PlayerController>();
         if (hitPlayer != null)
         {
             hitPlayer.GetComponent<Combat>().TakeDamage(10);
