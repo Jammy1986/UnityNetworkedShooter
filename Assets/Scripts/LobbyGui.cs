@@ -19,7 +19,7 @@ public class LobbyGui : MonoBehaviour
 
     private void Awake()
     {
-        if (NetworkManager.singleton.isNetworkActive)
+        if(NetworkManager.singleton == null || NetworkManager.singleton.isNetworkActive)
         {
             return;
         }
